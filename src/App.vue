@@ -20,7 +20,7 @@ import {
 } from '@lucide/vue'
 
 const menuOpen = ref(false)
-const activeTreatment = ref<number | null>(0)
+const activeTreatment = ref<number | null>(null)
 const formStatus = ref('')
 const showIntro = ref(true)
 const whatsappNumber = '559492211681'
@@ -34,19 +34,19 @@ let introUnlockTimer: number | null = null
 
 const treatments = [
   {
-    title: 'Ortodontia e aparelhos',
-    description: 'Avaliação para quem quer começar, continuar ou retomar o tratamento com aparelho, com planejamento e acompanhamento individualizado',
-    icon: Smile,
-  },
-  {
-    title: 'Clareamento dental',
-    description: 'Um plano supervisionado para devolver luminosidade ao sorriso com segurança e naturalidade',
-    icon: Sparkles,
+    title: 'Avaliação e prevenção',
+    description: 'Acompanhamento completo da saúde bucal para prevenir problemas e cuidar de dentes e gengivas ao longo do tempo',
+    icon: SunMedium,
   },
   {
     title: 'Restaurações estéticas',
     description: 'Recuperação de forma, função e harmonia com materiais que se integram ao seu sorriso',
     icon: WandSparkles,
+  },
+  {
+    title: 'Clareamento dental',
+    description: 'Um plano supervisionado para devolver luminosidade ao sorriso com segurança e naturalidade',
+    icon: Sparkles,
   },
   {
     title: 'Prótese dentária',
@@ -59,9 +59,9 @@ const treatments = [
     icon: Activity,
   },
   {
-    title: 'Limpeza preventiva',
-    description: 'Prevenção e acompanhamento para manter dentes e gengivas saudáveis ao longo do tempo',
-    icon: SunMedium,
+    title: 'Ortodontia e aparelhos',
+    description: 'Planejamento individualizado para alinhar o sorriso, melhorar a função e acompanhar cada fase do tratamento ortodôntico',
+    icon: Smile,
   },
   {
     title: 'Extrações',
@@ -189,7 +189,7 @@ function sendToWhatsApp(event: Event) {
   const form = event.currentTarget as HTMLFormElement
   const data = new FormData(form)
   const name = String(data.get('name') || '').trim()
-  const orthodonticNeed = String(data.get('orthodonticNeed') || '').trim()
+  const careNeed = String(data.get('careNeed') || '').trim()
   const period = String(data.get('period') || '').trim()
   const details = String(data.get('details') || '').trim()
   const message = [
@@ -197,7 +197,7 @@ function sendToWhatsApp(event: Event) {
     '',
     'Profissional desejado: Dr. Edrey Mundoco',
     `Nome: ${name}`,
-    `O que preciso: ${orthodonticNeed}`,
+    `O que preciso: ${careNeed}`,
     `Melhor período: ${period}`,
     `Detalhes: ${details}`,
   ].join('\n')
@@ -336,7 +336,7 @@ function sendToWhatsApp(event: Event) {
             <h2 id="treatments-title">Cuidado completo para a saúde e a <em>estética do sorriso</em></h2>
           </div>
           <p>
-            Atenção especial para quem deseja iniciar, continuar ou retomar o tratamento com aparelho, além de cuidados completos para o sorriso
+            Da prevenção à reabilitação, cada cuidado é pensado a partir das necessidades do seu sorriso, com planejamento individual e acompanhamento próximo
           </p>
         </div>
 
@@ -405,7 +405,7 @@ function sendToWhatsApp(event: Event) {
           <p class="eyebrow"><span></span> Quem sou</p>
           <h2 id="about-title">Sou o Dr. Edrey Mundoco e acredito em um cuidado <em>próximo e bem explicado</em></h2>
           <p class="about-lead">
-            Sou cirurgião-dentista, formado pela Faculdade Integrada Carajás (FIC), e meu atendimento começa pela escuta. Recebo pacientes que desejam iniciar, continuar ou retomar o tratamento com aparelho, sempre com avaliação individual e um plano claro para cada etapa
+            Sou cirurgião-dentista, formado pela Faculdade Integrada Carajás (FIC), e meu atendimento começa pela escuta. Cuido de diferentes necessidades de saúde e estética bucal, sempre com avaliação individual, orientação transparente e um plano claro para cada etapa
           </p>
           <div class="professional-register">
             <ShieldCheck :size="24" aria-hidden="true" />
@@ -481,7 +481,7 @@ function sendToWhatsApp(event: Event) {
           <p class="eyebrow"><span></span> Atendimento pelo WhatsApp</p>
           <h2 id="booking-title">Conte o que você precisa e fale <em>com a recepção</em></h2>
           <p>
-            Preencha as informações, principalmente se deseja começar ou continuar um atendimento com aparelho. A recepção receberá seu pedido já identificado para atendimento com o Dr. Edrey
+            Conte o que você busca para sua saúde bucal. A recepção receberá suas informações e poderá orientar o primeiro passo para o atendimento com o Dr. Edrey
           </p>
           <div class="booking-assurance">
             <MessageCircle :size="22" aria-hidden="true" />
@@ -496,14 +496,15 @@ function sendToWhatsApp(event: Event) {
           <label for="name">Como podemos chamar você?</label>
           <input id="name" name="name" type="text" autocomplete="name" placeholder="Seu nome" required />
 
-          <label for="orthodontic-need">Como podemos ajudar?</label>
-          <select id="orthodontic-need" name="orthodonticNeed" required>
+          <label for="care-need">Como podemos ajudar?</label>
+          <select id="care-need" name="careNeed" required>
             <option value="" disabled selected>Selecione uma opção</option>
-            <option value="Quero começar um atendimento com aparelho">Quero começar um atendimento com aparelho</option>
-            <option value="Quero continuar meu atendimento com aparelho">Quero continuar meu atendimento com aparelho</option>
-            <option value="Já uso aparelho e preciso de manutenção ou avaliação">Preciso de manutenção ou avaliação do aparelho</option>
-            <option value="Quero retomar um tratamento ortodôntico interrompido">Quero retomar um tratamento interrompido</option>
-            <option value="Quero conversar sobre outro tratamento odontológico">Outro tratamento odontológico</option>
+            <option value="Quero fazer uma avaliação ou limpeza preventiva">Avaliação ou limpeza preventiva</option>
+            <option value="Quero cuidar da estética do meu sorriso">Clareamento ou restauração estética</option>
+            <option value="Preciso tratar dor ou desconforto">Dor, desconforto ou tratamento de canal</option>
+            <option value="Quero avaliar prótese ou reabilitação dentária">Prótese ou reabilitação dentária</option>
+            <option value="Quero iniciar, continuar ou retomar um tratamento ortodôntico">Ortodontia e aparelhos</option>
+            <option value="Quero conversar sobre outra necessidade odontológica">Outra necessidade odontológica</option>
           </select>
 
           <label for="period">Qual período costuma ser melhor?</label>
@@ -519,7 +520,7 @@ function sendToWhatsApp(event: Event) {
             id="details"
             name="details"
             rows="4"
-            placeholder="Ex.: já uso aparelho há dois anos e quero continuar o acompanhamento…"
+            placeholder="Ex.: quero fazer uma avaliação e entender qual cuidado é mais indicado para mim…"
             required
           ></textarea>
 
